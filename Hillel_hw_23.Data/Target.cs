@@ -2,32 +2,31 @@
 
 namespace Hillel_hw_23.Data
 {
-    public class Agent
+    public class Target
     {
-        public static void AddNew(string fName, string lName, string? mName, int depId, int positionId, int rankId, string? phone, string? address)
+        public static void AddNew(string fName, string lName, string? mName, int caseId, string? phone, string? bday, string? address, string? info)
         {
             using (MySqlConnection conn = new(Settings.ConnectionStr))
             {
                 conn.Open();
-                string addNew = @"INSERT INTO contora.agent 
+                string addNew = @"INSERT INTO contora.target
                     (
-                    `first_name`, `last_name`, `middle_name`, `department_id`, 
-                    `position_id`, `rank_id`, `phone`, `address`
-                    )
+                    `first_name`, `last_name`, `middle_name`, `case_id`, 
+                    `phone`, `birthdate`, `address`, `additional_info`)
                     VALUES 
                     (
-                    @fName, @lName, @mName, @depId, 
-                    @positionId, @rankId, @phone, @address
+                    @fName, @lName, @mName, @caseId, 
+                    @phone, @bday, @address, @info
                     )";
                 MySqlCommand command = new(addNew, conn);
                 command.Parameters.AddWithValue("@fName", fName);
                 command.Parameters.AddWithValue("@lName", lName);
                 command.Parameters.AddWithValue("@mName", mName);
-                command.Parameters.AddWithValue("@depId", depId);
-                command.Parameters.AddWithValue("@positionId", positionId);
-                command.Parameters.AddWithValue("@rankId", rankId);
+                command.Parameters.AddWithValue("@caseId", caseId);
                 command.Parameters.AddWithValue("@phone", phone);
+                command.Parameters.AddWithValue("@bday", bday);
                 command.Parameters.AddWithValue("@address", address);
+                command.Parameters.AddWithValue("@info", info);
                 command.ExecuteNonQuery();
             }
         }
