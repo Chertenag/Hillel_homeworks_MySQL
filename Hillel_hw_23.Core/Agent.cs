@@ -2,7 +2,7 @@
 {
     public class Agent
     {
-        public static void AddNew(string fName, string lName, string mName, int depId, int positionId, int rankId, string phone, string address)
+        public static void AddNew(string fName, string lName, string mName, int depId, int positionId, int rankId, int statusId, string phone, string address)
         {
             Data.Agent.AddNew(
                 fName == string.Empty ? throw new ArgumentException("Name can`t be empty.") :
@@ -14,6 +14,7 @@
                 depId,
                 positionId,
                 rankId,
+                statusId,
                 phone == string.Empty ? null : phone,
                 address == string.Empty ? null :
                     address.Length > 100 ? throw new ArgumentException("Address must be below 100 symbols.") : address);

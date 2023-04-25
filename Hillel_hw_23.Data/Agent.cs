@@ -4,7 +4,7 @@ namespace Hillel_hw_23.Data
 {
     public class Agent
     {
-        public static void AddNew(string fName, string lName, string? mName, int depId, int positionId, int rankId, string? phone, string? address)
+        public static void AddNew(string fName, string lName, string? mName, int depId, int positionId, int rankId, int statusId, string? phone, string? address)
         {
             using (MySqlConnection conn = new(Settings.ConnectionStr))
             {
@@ -12,12 +12,12 @@ namespace Hillel_hw_23.Data
                 string addNew = @"INSERT INTO contora.agent 
                     (
                     `first_name`, `last_name`, `middle_name`, `department_id`, 
-                    `position_id`, `rank_id`, `phone`, `address`
+                    `position_id`, `rank_id`, `status_id`, `phone`, `address`
                     )
                     VALUES 
                     (
                     @fName, @lName, @mName, @depId, 
-                    @positionId, @rankId, @phone, @address
+                    @positionId, @rankId, @statusId, @phone, @address
                     )";
                 MySqlCommand command = new(addNew, conn);
                 command.Parameters.AddWithValue("@fName", fName);
@@ -26,6 +26,7 @@ namespace Hillel_hw_23.Data
                 command.Parameters.AddWithValue("@depId", depId);
                 command.Parameters.AddWithValue("@positionId", positionId);
                 command.Parameters.AddWithValue("@rankId", rankId);
+                command.Parameters.AddWithValue("@statusId", statusId);
                 command.Parameters.AddWithValue("@phone", phone);
                 command.Parameters.AddWithValue("@address", address);
                 command.ExecuteNonQuery();
