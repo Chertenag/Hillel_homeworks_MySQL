@@ -4,7 +4,7 @@ namespace Hillel_hw_23.Data
 {
     public class Case
     {
-        public static void AddNew(int depId, int primAgentId, int? secAgentId, string dateOpen, string? dateClose)
+        public static async Task AddNew(int depId, int primAgentId, int? secAgentId, string dateOpen, string? dateClose, CancellationToken token)
         {
             using (MySqlConnection conn = new(Settings.ConnectionStr))
             {
@@ -25,7 +25,7 @@ namespace Hillel_hw_23.Data
                 command.Parameters.AddWithValue("@secAgentId", secAgentId);
                 command.Parameters.AddWithValue("@dateOpen", dateOpen);
                 command.Parameters.AddWithValue("@dateClose", dateClose);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

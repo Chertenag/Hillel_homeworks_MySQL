@@ -2,7 +2,7 @@
 {
     public class Agent
     {
-        public static void ConsoleInterface()
+        public static async Task ConsoleInterface()
         {
             while (true)
             {
@@ -18,7 +18,8 @@
                     {
                         //Add record.
                         case 1:
-                            ConsoleAgentAddNew_Steps();
+                            //Здесь и далее в качестве токена будет заглушка, т.к. пока хз как адекватно из консоли отправить запрос на отмену.
+                            await ConsoleAgentAddNew_Steps(CancellationToken.None);
                             break;
 
                         //Update record.
@@ -50,7 +51,7 @@
             }
         }
 
-        public static void ConsoleAgentAddNew_Steps()
+        public static async Task ConsoleAgentAddNew_Steps(CancellationToken token)
         {
             Console.WriteLine("Введите имя (обязательное поле <= 50 символов).");
             string fName = Console.ReadLine();
@@ -71,7 +72,7 @@
             Console.WriteLine("Введите адрес (не обязательное поле <= 100 символов).");
             string address = Console.ReadLine();
 
-            Core.Agent.AddNew(fName, lName, mName, depId, posId, rankId, statusId, phone, address);
+            await Core.Agent.AddNew(fName, lName, mName, depId, posId, rankId, statusId, phone, address, token);
 
             Console.WriteLine("Запись добавлена.");
         }

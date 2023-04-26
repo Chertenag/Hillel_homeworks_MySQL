@@ -2,7 +2,7 @@
 {
     public class Case
     {
-        public static void AddNew(int depId, int primAgentId, int secAgentId, string dateOpen, string dateClose)
+        public static async Task AddNew(int depId, int primAgentId, int secAgentId, string dateOpen, string dateClose, CancellationToken token)
         {
             string mappedDate = DateMapper.Convert(dateOpen);
             if (mappedDate == null)
@@ -10,12 +10,13 @@
                 throw new ArgumentException("DateOpen is required parameter.");
             }
 
-            Data.Case.AddNew(
+            await Data.Case.AddNew(
                 depId,
                 primAgentId,
                 secAgentId < 0 ? null : secAgentId,
                 mappedDate,
-                DateMapper.Convert(dateClose));
+                DateMapper.Convert(dateClose),
+                token);
         }
     }
 }

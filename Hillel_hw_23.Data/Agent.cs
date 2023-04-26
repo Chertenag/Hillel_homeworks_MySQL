@@ -4,7 +4,7 @@ namespace Hillel_hw_23.Data
 {
     public class Agent
     {
-        public static void AddNew(string fName, string lName, string? mName, int depId, int positionId, int rankId, int statusId, string? phone, string? address)
+        public static async Task AddNew(string fName, string lName, string? mName, int depId, int positionId, int rankId, int statusId, string? phone, string? address, CancellationToken token)
         {
             using (MySqlConnection conn = new(Settings.ConnectionStr))
             {
@@ -29,7 +29,7 @@ namespace Hillel_hw_23.Data
                 command.Parameters.AddWithValue("@statusId", statusId);
                 command.Parameters.AddWithValue("@phone", phone);
                 command.Parameters.AddWithValue("@address", address);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync(token);
             }
         }
     }

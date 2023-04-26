@@ -2,9 +2,9 @@
 {
     public class Agent
     {
-        public static void AddNew(string fName, string lName, string mName, int depId, int positionId, int rankId, int statusId, string phone, string address)
+        public static async Task AddNew(string fName, string lName, string mName, int depId, int positionId, int rankId, int statusId, string phone, string address, CancellationToken token)
         {
-            Data.Agent.AddNew(
+            await Data.Agent.AddNew(
                 fName == string.Empty ? throw new ArgumentException("Name can`t be empty.") :
                     fName.Length > 50 ? throw new ArgumentException("Name must be below 50 symbols.") : fName,
                 lName == string.Empty ? throw new ArgumentException("Last name can`t be empty.") :
@@ -17,7 +17,8 @@
                 statusId,
                 phone == string.Empty ? null : phone,
                 address == string.Empty ? null :
-                    address.Length > 100 ? throw new ArgumentException("Address must be below 100 symbols.") : address);
+                    address.Length > 100 ? throw new ArgumentException("Address must be below 100 symbols.") : address,
+                token);
         }
     }
 }

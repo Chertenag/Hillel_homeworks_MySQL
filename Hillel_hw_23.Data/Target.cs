@@ -4,7 +4,7 @@ namespace Hillel_hw_23.Data
 {
     public class Target
     {
-        public static void AddNew(string fName, string lName, string? mName, int caseId, string? phone, string? bday, string? address, string? info)
+        public static async Task AddNew(string fName, string lName, string? mName, int caseId, string? phone, string? bday, string? address, string? info, CancellationToken token)
         {
             using (MySqlConnection conn = new(Settings.ConnectionStr))
             {
@@ -27,7 +27,7 @@ namespace Hillel_hw_23.Data
                 command.Parameters.AddWithValue("@bday", bday);
                 command.Parameters.AddWithValue("@address", address);
                 command.Parameters.AddWithValue("@info", info);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

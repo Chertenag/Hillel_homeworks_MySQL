@@ -2,7 +2,7 @@
 {
     public class Target
     {
-        public static void ConsoleInterface()
+        public static async Task ConsoleInterface()
         {
             while (true)
             {
@@ -18,7 +18,7 @@
                     {
                         //Add record.
                         case 1:
-                            ConsoleTargetAddNew_Steps();
+                            await ConsoleTargetAddNew_Steps(CancellationToken.None);
                             break;
 
                         //Update record.
@@ -49,7 +49,7 @@
             }
         }
 
-        public static void ConsoleTargetAddNew_Steps()
+        public static async Task ConsoleTargetAddNew_Steps(CancellationToken token)
         {
             Console.WriteLine("Введите имя (обязательное поле <= 50 символов).");
             string fName = Console.ReadLine();
@@ -68,7 +68,7 @@
             Console.WriteLine("Введите дополнительную информацию (не обязательное поле <= 250 символов).");
             string info = Console.ReadLine();
 
-            Core.Target.AddNew(fName, lName, mName, caseId, phone, bDay, address, info);
+            await Core.Target.AddNew(fName, lName, mName, caseId, phone, bDay, address, info, token);
 
             Console.WriteLine("Запись добавлена.");
         }

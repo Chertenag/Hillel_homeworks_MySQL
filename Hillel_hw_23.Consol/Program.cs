@@ -3,7 +3,7 @@
     internal class Program
     {
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Core.Settings.ConnectionStr = "Server=localhost;Port=3306;Database=contora;Uid=VSuser;Pwd=VisualStudio;";
 
@@ -19,7 +19,7 @@
                 {
                     //Agent table.
                     case 1:
-                        Agent.ConsoleInterface();
+                        await Agent.ConsoleInterface();
                         break;
 
                     //Department table.
@@ -29,12 +29,12 @@
 
                     //Case table.
                     case 3:
-                        Case.ConsoleInterface();
+                        await Case.ConsoleInterface();
                         break;
 
                     //Target table.
                     case 4:
-                        Target.ConsoleInterface();
+                        await Target.ConsoleInterface();
                         break;
 
                     //Check BD connection.

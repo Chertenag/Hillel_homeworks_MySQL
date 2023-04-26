@@ -2,7 +2,7 @@
 {
     public class Case
     {
-        public static void ConsoleInterface()
+        public static async Task ConsoleInterface()
         {
             while (true)
             {
@@ -18,7 +18,7 @@
                     {
                         //Add record.
                         case 1:
-                            ConsoleCaseAddNew_Steps();
+                            await ConsoleCaseAddNew_Steps(CancellationToken.None);
                             break;
 
                         //Update record.
@@ -49,7 +49,7 @@
             }
         }
 
-        public static void ConsoleCaseAddNew_Steps()
+        public static async Task ConsoleCaseAddNew_Steps(CancellationToken token)
         {
             Console.WriteLine("Введите ID отдела (обязательное поле).");
             int depId = Int32.Parse(Console.ReadLine());
@@ -67,7 +67,7 @@
             Console.WriteLine("Введите закрытия дела (не обязательное поле - 1999.12.31).");
             string clDate = Console.ReadLine();
 
-            Core.Case.AddNew(depId, primId, secId, openDate, clDate);
+            await Core.Case.AddNew(depId, primId, secId, openDate, clDate, token);
 
             Console.WriteLine("Запись добавлена.");
         }
