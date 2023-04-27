@@ -6,7 +6,7 @@
         {
             while (true)
             {
-                Console.WriteLine(CustomMessages.ChooseAction);
+                Console.WriteLine(CustomMessages.ChooseMainAction);
                 if (!int.TryParse(Console.ReadLine(), out int idAction))
                 {
                     Console.WriteLine(CustomMessages.NotAnId);

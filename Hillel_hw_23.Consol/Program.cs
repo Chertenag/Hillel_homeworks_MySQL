@@ -29,7 +29,7 @@
 
                     //Case table.
                     case 3:
-                        await Case.ConsoleInterface();
+                        await Case.ConsoleMainInterface();
                         break;
 
                     //Target table.
