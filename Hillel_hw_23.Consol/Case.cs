@@ -2,7 +2,8 @@
 {
     public class Case
     {
-        public static readonly string ChooseMainAction = "Выберите действие: Добавить запись - 1, Обновить запись - 2 (не доступно), Поиск записи(ей) - 3 , Удалить запись - 4 (не доступно), Отмена - 0.";
+        public static readonly string ChooseMainAction = "Выберите действие: Добавить запись - 1, Обновить запись - 2 (не доступно), Поиск записи(ей) - 3 , " +
+            "Удалить запись - 4 (не доступно), Отмена - 0.";
 
         public static async Task ConsoleMainInterface()
         {
@@ -37,7 +38,7 @@
                         //case 4:
                         //    break;
 
-                        //Return from Agent table.
+                        //Return from Case table.
                         case 0:
                             return;
                         default:
