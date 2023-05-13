@@ -36,7 +36,9 @@ namespace Hillel_hw_25.EFCore
             int caseId, string phone, string bDay, string address, string addInfo, CancellationToken token)
         {
             //Проверки...
-            await EFData.Target.Create_async (id, fName, lName, mName, caseId, phone, DateOnly.Parse(bDay), address, addInfo, token);
+            await EFData.Target.Create_async (id, fName, lName, mName, caseId, phone,
+                String.IsNullOrEmpty(bDay) ? null : DateOnly.Parse(bDay), 
+                address, addInfo, token);
         }
 
         public static async Task<List<EFCore.Target>> Read_ById_async(int id, CancellationToken token)
