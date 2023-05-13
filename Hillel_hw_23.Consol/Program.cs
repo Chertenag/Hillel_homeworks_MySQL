@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Microsoft.Extensions.Configuration;
 
 namespace Hillel_hw_23.Consol
 {
@@ -18,20 +19,8 @@ namespace Hillel_hw_23.Consol
 
         static async Task Main(string[] args)
         {
-            //Надоело каждый раз при тестах разворачивать консоль на весь экран...
-            ShowWindow(GetConsoleWindow(), MAXIMIZE);
-            Core.Settings.ConnectionStr = "Server=localhost;Port=3306;Database=contora;Uid=VSuser;Pwd=VisualStudio;";
-
-
-            //var rez = await Hillel_hw_25.EFCore.Target.Read_ById_async(39, CancellationToken.None);
-            //rez[0].LastName = "EF_lm";
-            //await Hillel_hw_25.EFCore.Target.Update_async(rez[0], CancellationToken.None);
-            //var rez2 = await Hillel_hw_25.EFCore.Target.Read_ById_async(39, CancellationToken.None);
-
-            //await Hillel_hw_25.EFCore.Target.Create_async(0, "EF_fn3", "EF_ln3", "EF_mn3", 12, null, "1980.08.12", null, "apasniy 2", CancellationToken.None);
-
-            //await Hillel_hw_25.EFCore.Target.Delete_byId_async(45, CancellationToken.None);
-            //return;
+            LoadConfigs();
+            //Tests();
 
             while (true)
             {
@@ -73,6 +62,31 @@ namespace Hillel_hw_23.Consol
                         break;
                 }
             }
+        }
+
+        static void LoadConfigs ()
+        {
+            //Надоело каждый раз при тестах разворачивать консоль на весь экран...
+            ShowWindow(GetConsoleWindow(), MAXIMIZE);
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("Settings.json")
+                .Build();
+
+            Core.Settings.ConnectionStr = builder.GetConnectionString("ContoraDB");
+        }
+
+        static void Tests()
+        {
+            //var rez = await Hillel_hw_25.EFCore.Target.Read_ById_async(39, CancellationToken.None);
+            //rez[0].LastName = "EF_lm";
+            //await Hillel_hw_25.EFCore.Target.Update_async(rez[0], CancellationToken.None);
+            //var rez2 = await Hillel_hw_25.EFCore.Target.Read_ById_async(39, CancellationToken.None);
+
+            //await Hillel_hw_25.EFCore.Target.Create_async(0, "EF_fn3", "EF_ln3", "EF_mn3", 12, null, "1980.08.12", null, "apasniy 2", CancellationToken.None);
+
+            //await Hillel_hw_25.EFCore.Target.Delete_byId_async(45, CancellationToken.None);
         }
     }
 }
