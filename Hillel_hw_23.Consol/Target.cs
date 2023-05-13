@@ -68,7 +68,8 @@
             Console.WriteLine("Введите дополнительную информацию (не обязательное поле <= 250 символов).");
             string info = Console.ReadLine();
 
-            await Core.Target.AddNew(fName, lName, mName, caseId, phone, bDay, address, info, token);
+            await Hillel_hw_25.EFCore.Target.Create_async(0/*В БД автоинкремент, но мог бы быть GUID,*/, 
+                fName, lName, mName, caseId, phone, bDay, address, info, token);
 
             Console.WriteLine("Запись добавлена.");
         }

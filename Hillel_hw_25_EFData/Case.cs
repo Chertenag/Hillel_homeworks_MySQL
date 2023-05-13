@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Hillel_hw_25_EFData;
+namespace Hillel_hw_25.EFData;
 
 public partial class Case
 {

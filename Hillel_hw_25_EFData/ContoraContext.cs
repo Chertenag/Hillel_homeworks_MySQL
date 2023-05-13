@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hillel_hw_25_EFData;
+namespace Hillel_hw_25.EFData;
 
 public partial class ContoraContext : DbContext
 {
