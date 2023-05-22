@@ -69,47 +69,53 @@ namespace Hillel_hw_23.Data
             }
         }
 
-        //См. Core.Agent.Search_ByField<T>(...).
-        ///// <summary>
-        ///// Посик в таблице по значению одной колонки.
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="columnName">Имя колонки.</param>
-        ///// <param name="searchValue">Значения для поиска.</param>
-        ///// <param name="token">Токен отмены.</param>
-        ///// <returns>Список всех найдёных объектов типа Data.Agent.</returns>
-        //public static async Task<List<Agent>> Search_ByField<T>(AgentColumns columnName, T searchValue, CancellationToken token)
-        //{
-        //    List<Agent> agents = new();
+        public static async Task AddNew(Agent agent, CancellationToken token)
+        {
+            using (MySqlConnection conn = new(Settings.ConnectionStr))
+            {
+                conn.Open();
+                string addNew = @"INSERT INTO contora.agent 
+                    (
+                    `first_name`, `last_name`, `middle_name`, `department_id`, 
+                    `position_id`, `rank_id`, `status_id`, `phone`, `address`
+                    )
+                    VALUES 
+                    (
+                    @fName, @lName, @mName, @depId, 
+                    @positionId, @rankId, @statusId, @phone, @address
+                    )";
+                MySqlCommand command = new(addNew, conn);
+                command.Parameters.AddWithValue("@fName", agent.FirstName);
+                command.Parameters.AddWithValue("@lName", agent.LastName);
+                command.Parameters.AddWithValue("@mName", agent.MiddleName);
+                command.Parameters.AddWithValue("@depId", agent.DepartmentID);
+                command.Parameters.AddWithValue("@positionId", agent.PositionID);
+                command.Parameters.AddWithValue("@rankId", agent.RankID);
+                command.Parameters.AddWithValue("@statusId", agent.StatusID);
+                command.Parameters.AddWithValue("@phone", agent.Phone);
+                command.Parameters.AddWithValue("@address", agent.Address);
+                await command.ExecuteNonQueryAsync(token);
+            }
+        }
 
-        //    using (MySqlConnection conn = new(Settings.ConnectionStr))
-        //    {
-        //        conn.Open();
-        //        string search = $@"SELECT * FROM contora.agent
-        //            WHERE {columnName} = @search";
-        //        MySqlCommand command = new(search, conn);
-        //        command.Parameters.AddWithValue("@search", searchValue);
-        //        MySqlDataReader reader = command.ExecuteReader();
+        public static async Task<List<Agent>> ReadAll(CancellationToken token)
+        {
+            List<Agent> agents = new();
 
-        //        while (await reader.ReadAsync(token))
-        //        {
-        //            agents.Add(new Agent
-        //                (
-        //                reader.GetInt32(AgentColumns.id.ToString()),
-        //                reader.GetString(AgentColumns.first_name.ToString()),
-        //                reader.GetString(AgentColumns.last_name.ToString()),
-        //                reader.GetString(AgentColumns.middle_name.ToString()),
-        //                reader.GetInt32(AgentColumns.department_id.ToString()),
-        //                reader.GetInt32(AgentColumns.position_id.ToString()),
-        //                reader.GetInt32(AgentColumns.rank_id.ToString()),
-        //                reader.GetInt32(AgentColumns.status_id.ToString()),
-        //                reader.GetString(AgentColumns.phone.ToString()),
-        //                reader.GetString(AgentColumns.address.ToString())
-        //                ));
-        //        }
-        //    }
-        //    return agents;
-        //}
+            using (MySqlConnection conn = new(Settings.ConnectionStr))
+            {
+                conn.Open();
+                string search = $@"SELECT * FROM contora.agent";
+                MySqlCommand command = new(search, conn);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (await reader.ReadAsync(token))
+                {
+                    agents.Add(await ReadAgent(reader, token));
+                }
+            }
+            return agents;
+        }
 
         //Знаю, что тут в любом случае будет или 0 или 1, но так проще обрабатывать как с другими запросами.
         public static async Task<List<Agent>> Search_ById(int id, CancellationToken token)
@@ -249,7 +255,7 @@ namespace Hillel_hw_23.Data
             }
             if (!await reader.IsDBNullAsync((int)AgentColumns.address, token))
             {
-                address = reader.GetString(AgentColumns.phone.ToString());
+                address = reader.GetString(AgentColumns.address.ToString());
             }
 
             return new Agent

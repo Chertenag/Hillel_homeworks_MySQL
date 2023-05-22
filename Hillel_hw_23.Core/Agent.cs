@@ -1,15 +1,16 @@
 ﻿using Hillel_hw_23.Data;
+using System.Text.Json.Serialization;
 
 namespace Hillel_hw_23.Core
 {
     public class Agent
     {
         private int id;
-        private string fName;
-        private string lName;
-        private string? mName;
-        private int depId;
-        private int posId;
+        private string firstName;
+        private string lastName;
+        private string? middleName;
+        private int departmentID;
+        private int positionID;
         private int rankId;
         private int statusId;
         private string? phone;
@@ -18,45 +19,45 @@ namespace Hillel_hw_23.Core
         public int ID { get => id; set => id = value; }
         public string FirstName
         {
-            get => fName;
+            get => firstName;
             set
             {
-                fName = string.IsNullOrEmpty(value) ? throw new ArgumentException("Имя не должно быть пустым.") :
+                firstName = string.IsNullOrEmpty(value) ? throw new ArgumentException("Имя не должно быть пустым.") :
                     value.Length > 50 ? throw new ArgumentException("Имя должно быть менее 50 символов.") : value;
             }
         }
         public string LastName
         {
-            get => lName;
+            get => lastName;
             set
             {
-                lName = string.IsNullOrEmpty(value) ? throw new ArgumentException("Фамилия не должна быть пустой.") :
+                lastName = string.IsNullOrEmpty(value) ? throw new ArgumentException("Фамилия не должна быть пустой.") :
                     value.Length > 50 ? throw new ArgumentException("Фамилия должна быть не более 50 символов.") : value;
             }
         }
         public string? MiddleName
         {
-            get => mName;
+            get => middleName;
             set
             {
-                mName = string.IsNullOrEmpty(value) ? null :
+                middleName = string.IsNullOrEmpty(value) ? null :
                     value.Length > 50 ? throw new ArgumentException("Отчество должно быть не более 50 символов.") : value;
             }
         }
         public int DepartmentID
         {
-            get => depId;
+            get => departmentID;
             set
             {
-                depId = value < 1 ? throw new ArgumentException("ID отдела не может быть 0 или отрицательным.") : value;
+                departmentID = value < 1 ? throw new ArgumentException("ID отдела не может быть 0 или отрицательным.") : value;
             }
         }
         public int PositionID
         {
-            get => posId;
+            get => positionID;
             set
             {
-                posId = value < 1 ? throw new ArgumentException("ID должности не может быть 0 или отрицательным.") : value;
+                positionID = value < 1 ? throw new ArgumentException("ID должности не может быть 0 или отрицательным.") : value;
             }
         }
         public int RankID
@@ -94,14 +95,17 @@ namespace Hillel_hw_23.Core
             }
         }
 
+        public Agent() { }
+
+
         public Agent(int id, string fName, string lName, string? mName, int depId, int positionId, int rankId, int statusId, string? phone, string? address)
         {
             this.id = id;
-            this.fName = fName;
-            this.lName = lName;
-            this.mName = mName;
-            this.depId = depId;
-            this.posId = positionId;
+            this.firstName = fName;
+            this.lastName = lName;
+            this.middleName = mName;
+            this.departmentID = depId;
+            this.positionID = positionId;
             this.rankId = rankId;
             this.statusId = statusId;
             this.phone = phone;
@@ -127,12 +131,22 @@ namespace Hillel_hw_23.Core
                 token);
         }
 
+        public static async Task AddNew(Agent agent, CancellationToken token)
+        {
+            await Data.Agent.AddNew(MapperToDataAgent(agent), token);
+        }
+
+        public static async Task<List<Agent>> ReadAll (CancellationToken token)
+        {
+            var rez = await Data.Agent.ReadAll(token);
+            return rez.Select(MapperFromDataAgent).ToList();
+        }
+
         public static async Task<List<Agent>> Search_ById(int id, CancellationToken token)
         {
             var rez = await Data.Agent.Search_ById(id, token);
             return rez.Select(MapperFromDataAgent).ToList();
         }
-
 
         public static async Task<List<Agent>> Search_ByFirstName(string fName, CancellationToken token)
         {
@@ -157,28 +171,12 @@ namespace Hillel_hw_23.Core
             var rez = await Data.Agent.Search_ByPositionId(posId, token);
             return rez.Select(MapperFromDataAgent).ToList();
         }
+        
         public static async Task<List<Agent>> Search_ByStatusId(int statusId, CancellationToken token)
         {
             var rez = await Data.Agent.Search_ByStatusId(statusId, token);
             return rez.Select(MapperFromDataAgent).ToList();
         }
-
-        //Хотел сделать возможность поиска по одной любой клонке в одном методе.
-        //Но потом понял, что так будут сложности, если нужно будет добавить проверку значения для определённой колонки. 
-        ///// <summary>
-        ///// Посик в таблице по значению одной колонки.
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="columnName">Имя колонки.</param>
-        ///// <param name="searchValue">Значения для поиска.</param>
-        ///// <param name="token">Токен отмены.</param>
-        ///// <returns>Список всех найдёных объектов типа Core.Agent.</returns>
-        //public static async Task<List<Agent>> Search_ByField<T>(Data.AgentColumns columnName, T searchValue, CancellationToken token)
-        //{
-        //    var rez = await Data.Agent.Search_ByField<T>(columnName, searchValue, token);
-        //    return rez.Select(Mapper).ToList();
-        //}
-
 
         public static async Task Update(Agent agent, CancellationToken token)
         {
@@ -214,6 +212,5 @@ namespace Hillel_hw_23.Core
                 string.IsNullOrEmpty(agent.Address) ? null :
                     agent.Address.Length > 100 ? throw new ArgumentException("Адрес должен быть менее 100 сиволов.") : agent.Address);
         }
-
     }
 }
